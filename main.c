@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:44:09 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/22 12:32:55 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/01/22 15:23:17 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ int		main(int argc, char **argv)
 		return (2);
 	while (get_next_line(fd, &line) == 1)
 	{	
-		printf("%s\n", line);
+		ft_putendl(line);
 		free(line);
 	}
 	if (argc == 2)
 		close(fd);
-	return (0);
 } 

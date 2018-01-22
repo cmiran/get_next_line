@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 14:50:48 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/22 15:58:15 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/01/22 17:34:29 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int 		get_next_line(const int fd, char **line)
 	if (!(curr = get_fd(&list, fd)))
 		return (-1);
 	ft_putendl("2");
-	if ( !(*line = ft_strnew(sizeof(char))))
+	if (!(*line = ft_strnew(sizeof(char))))
 		return (-1);
 	ft_putendl("3");
 	while ((ret = read(fd, buf, BUFF_SIZE)))

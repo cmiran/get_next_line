@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 14:50:48 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/22 17:34:29 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/01/23 03:00:09 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,66 +26,74 @@ void	del(t_list *list)
 	}
 	ft_memdel((void **)&list);
 }
-/*
-void		*del(char *str, size_t n)
+
+char	*join(char const *s1, char const *s2, char **loss)
 {
-	if (!str || !n)
-		return (0);
-	ft_bzero(str, n + 1);
-	free(str);
-	return (0);
+	size_t	i;
+	size_t	j;
+	char		*str;
+
+	if (!(str = ft_strnew(ft_strlen(s1) + ft_strclen(s2, '\n'))))
+		return (NULL);
+	i = 0;
+	while (*s1)
+		str[i++] = *s1++;
+	j = 0;
+	while (s2[j] && s2[j] != '\n')
+		str[i++] = s2[j++];
+	if (s2[j] && (*loss = ft_strnew(ft_strlen(s2))))
+		while (s2[j])
+			*loss++ = (char *)&s2[j++];
+	return (str);
 }
-*/
-t_list	*get_fd(t_list **list, const int fd)
+
+t_list	*get_fd(t_list **list, const int fd, char **loss)
 {
 	t_list *file;
 
-	ft_putendl("10");
 	file = *list;
 	while (file)
 	{
-		ft_putendl("11");
 		if ((int)file->content_size == fd)
+		{
+			if(loss)
+			{
+				file->content = ft_strdup(*loss);
+				ft_strdel(loss);
+			}
 			break;
+		}
 		file = file->next;
 	}
-	ft_putendl("12");
-	if (!(file = ft_lstnew("\0", BUFF_SIZE)))
-		return (0);
-	ft_putendl("13");	
-	ft_lstadd(list, file);
-	file = *list;
-	file->content_size = fd;
+	if (!file)
+	{
+		if (!(file = ft_lstnew("\0", BUFF_SIZE)))
+			return (0);
+		file->content_size = fd;
+		ft_lstadd(list, file);
+	}
 	return (file);
 }
 
 int 		get_next_line(const int fd, char **line)
 {
 	int						ret;
-	t_list				*curr;
+	t_list					*curr;
 	static t_list	*list;
 	char					buf[BUFF_SIZE + 1];
+	static char		*loss;
 
-	if (BUFF_SIZE < 1 || fd < 0 || line == NULL || read(fd, buf, 0) < 0) 
+	if (BUFF_SIZE < 1 || fd < 0 || line == NULL
+			|| !(curr = get_fd(&list, fd, &loss)))
 		return (-1);
-	ft_putendl("1");
-	if (!(curr = get_fd(&list, fd)))
-		return (-1);
-	ft_putendl("2");
-	if (!(*line = ft_strnew(sizeof(char))))
-		return (-1);
-	ft_putendl("3");
-	while ((ret = read(fd, buf, BUFF_SIZE)))
+	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		if (ft_strchr(buf, '\n'))
-		{
-			curr->content = ft_strcjoin(curr->content, buf, '\n');
+		buf[ret] = '\0';
+		if ((curr->content = join(curr->content, buf, &loss)))
 			break;
-		}
-		curr->content = ft_strjoin(curr->content, buf);
 	}
-	ft_strcpy(*line, curr->content);
+	if (!(*line = ft_strdup(curr->content)))
+		return (-1);
 	del(curr);
-//	ft_lstdel(&curr, del(curr->content, BUFF_SIZE));
 	return (1);
 }

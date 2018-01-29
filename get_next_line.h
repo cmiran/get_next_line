@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 17:37:08 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/23 02:56:31 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/01/29 19:47:21 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <unistd.h>
 # include "../libft/libft.h"
 
-# define BUFF_SIZE 32
+# define BUFF_SIZE 42
 
 int	get_next_line(int fd, char **line);
 

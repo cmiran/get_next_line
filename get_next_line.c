@@ -5,97 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/18 14:50:48 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/23 14:42:05 by cmiran           ###   ########.fr       */
+/*   Created: 2018/01/22 18:55:01 by cmiran            #+#    #+#             */
+/*   Updated: 2018/01/29 21:30:43 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"	
+#include "get_next_line.h"
 
-void	del(t_list *list)
+int	get_next_line(const int fd, char **line)
 {
-	t_list *tmp;
+	static char	*list[OPEN_MAX];
+	int			i;
+	int			ret;
+	char		buf[BUFF_SIZE];
+	char		*tmp;
 
-	while (list->next != NULL)
-	{
-		tmp = list;
-		tmp->content_size = 0;
-		ft_bzero(tmp->content, ft_strlen(tmp->content));
-		list = tmp->next;
-		ft_memdel((void **)&tmp);
-	}
-	ft_memdel((void **)&list);
-}
-
-char	*join(char const *s1, char const *s2, char **loss)
-{
-	size_t	i;
-	size_t	j;
-	char		*str;
-
-	if (!(str = ft_strnew(ft_strlen(s1) + ft_strclen(s2, '\n'))))
-		return (NULL);
-	i = 0;
-	while (*s1)
-		str[i++] = *s1++;
-	ft_strdel((char **)&s1);
-	j = 0;
-	while (s2[j] && s2[j] != '\n')
-		str[i++] = s2[j++];
-	if (s2[++j] && (*loss = ft_strnew(ft_strlen(s2))))
-		while (s2[j])
-			*loss++ = (char *)&s2[j];
-	return (str);
-}
-
-t_list	*get_fd(t_list **list, const int fd, char **loss)
-{
-	t_list *file;
-
-	file = *list;
-	while (file)
-	{
-		if ((int)file->content_size == fd)
-			ft_memdel(&file->content);
-			file->content = ft_strnew(BUFF_SIZE);
-			if(loss)
-			{
-				file->content = ft_strdup(*loss);
-				ft_strdel(loss);
-			}
-			break;
-		file = file->next;
-	}
-	if (!file)
-	{
-		if (!(file = ft_lstnew("\0", BUFF_SIZE)))
-			return (0);
-		file->content_size = fd;
-		ft_lstadd(list, file);
-	}
-	return (file);
-}
-
-int 		get_next_line(const int fd, char **line)
-{
-	int						ret;
-	t_list				*curr;
-	static t_list	*list;
-	char					buf[BUFF_SIZE];
-	static char		*loss;
-
-	if (BUFF_SIZE < 1 || fd < 0 || line == NULL
-			|| !(curr = get_fd(&list, fd, &loss)))
+	if (BUFF_SIZE < 1 || fd < 0 || line == NULL || read(fd, NULL, 0))
 		return (-1);
+	else if (!(list[fd]) && (!(list[fd] = ft_strnew(BUFF_SIZE))))
+		return (-1);
+	else if (ft_strchr(list[fd], '\n') || ft_strchr(list[fd], '\0'))
+	{
+		i = ft_strclen(list[fd], '\n');
+		tmp = list[fd];
+		if (!(list[fd] = ft_strsub(list[fd], i + 1, ft_strlen(list[fd]) - i)))
+			return (-1);
+		free(tmp);
+	}
 	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		if (!(curr->content = join(curr->content, buf, &loss)))
+		buf[ret] = '\0';
+		tmp = list[fd];
+		if (!(list[fd] = ft_strjoin(list[fd], buf)))
 			return (-1);
+		free(tmp);
 		if (ft_strchr(buf, '\n'))
-			break;
+			break ;
 	}
-	if (!(*line = ft_strdup(curr->content)))
+	if (list[fd][0] == '\0')
+		return (0);
+	if (!(*line = ft_strcdup(list[fd], '\n')))
 		return (-1);
-	del(curr);
 	return (1);
 }

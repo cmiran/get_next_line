@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 14:50:48 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/23 03:00:09 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/01/23 14:42:05 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ char	*join(char const *s1, char const *s2, char **loss)
 	i = 0;
 	while (*s1)
 		str[i++] = *s1++;
+	ft_strdel((char **)&s1);
 	j = 0;
 	while (s2[j] && s2[j] != '\n')
 		str[i++] = s2[j++];
-	if (s2[j] && (*loss = ft_strnew(ft_strlen(s2))))
+	if (s2[++j] && (*loss = ft_strnew(ft_strlen(s2))))
 		while (s2[j])
-			*loss++ = (char *)&s2[j++];
+			*loss++ = (char *)&s2[j];
 	return (str);
 }
 
@@ -55,14 +56,14 @@ t_list	*get_fd(t_list **list, const int fd, char **loss)
 	while (file)
 	{
 		if ((int)file->content_size == fd)
-		{
+			ft_memdel(&file->content);
+			file->content = ft_strnew(BUFF_SIZE);
 			if(loss)
 			{
 				file->content = ft_strdup(*loss);
 				ft_strdel(loss);
 			}
 			break;
-		}
 		file = file->next;
 	}
 	if (!file)
@@ -78,9 +79,9 @@ t_list	*get_fd(t_list **list, const int fd, char **loss)
 int 		get_next_line(const int fd, char **line)
 {
 	int						ret;
-	t_list					*curr;
+	t_list				*curr;
 	static t_list	*list;
-	char					buf[BUFF_SIZE + 1];
+	char					buf[BUFF_SIZE];
 	static char		*loss;
 
 	if (BUFF_SIZE < 1 || fd < 0 || line == NULL
@@ -88,8 +89,9 @@ int 		get_next_line(const int fd, char **line)
 		return (-1);
 	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		buf[ret] = '\0';
-		if ((curr->content = join(curr->content, buf, &loss)))
+		if (!(curr->content = join(curr->content, buf, &loss)))
+			return (-1);
+		if (ft_strchr(buf, '\n'))
 			break;
 	}
 	if (!(*line = ft_strdup(curr->content)))

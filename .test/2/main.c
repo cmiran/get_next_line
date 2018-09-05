@@ -6,11 +6,11 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/23 00:34:18 by cmiran            #+#    #+#             */
-/*   Updated: 2018/09/05 13:59:07 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/09/05 15:17:33 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../get_next_line.h"
+#include "../../get_next_line.h"
 #include <fcntl.h>
 
 int		main(int argc, char **argv)

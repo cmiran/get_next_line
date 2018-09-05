@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:44:09 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/23 02:22:13 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/09/05 16:36:52 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,65 +26,45 @@ int		main(int argc, char **argv)
 
 	if (argc == 1)
 		return (0);
-	i = 0;
-	while (argc > ++i)
+	argc > 1 ? fd = open(argv[1], O_RDONLY) : 0;
+	argc > 2 ? fe = open(argv[2], O_RDONLY) : 0;
+	argc > 3 ? ff = open(argv[3], O_RDONLY) : 0;
+	argc > 4 ? fg = open(argv[4], O_RDONLY) : 0;
+	if (argc > 1)
 	{
-		fd = open(argv[i++], O_RDONLY);
-		fe = open(argv[i++], O_RDONLY);
-		ff = open(argv[i++], O_RDONLY);
-		fg = open(argv[i], O_RDONLY);
-	}
-	if (argc == 2)
-	{
-		while (i - 1 > 1)
-		{
-			while (get_next_line(fd, &line) == 1)
-			{	
-				ft_putendl(line);
-				free(line);
-			}
-			i--;
+		while (get_next_line(fd, &line) > 0)
+		{	
+			ft_putendl(line);
+			free(line);
 		}
 		close(fd);
 	}
-	if (argc == 2)
+	if (argc > 2)
 	{
-		while (i - 1 > 1)
-		{
-			while (get_next_line(fe, &line) == 1)
-			{	
-				ft_putendl(line);
-				free(line);
-			}
-			i++;
+		while (get_next_line(fe, &line) > 0)
+		{	
+			ft_putendl(line);
+			free(line);
 		}
-	close(fe);
+		close(fe);
 	}
-	if (argc == 3)
+	if (argc > 3)
 	{
-		while (i + 1 > 1)
+		while (get_next_line(ff, &line) > 0)
 		{
-			while (get_next_line(ff, &line) == 1)
-			{
-				ft_putendl(line);
-				free(line);
-			}
-			i--;
+			ft_putendl(line);
+			free(line);
 		}
 		close(ff);
 	}
-	if (argc == 4)
+	if (argc > 4)
 	{
-		while (i - 1 > 1)
+		while (get_next_line(fg, &line) == 1)
 		{
-			while (get_next_line(fg, &line) == 1)
-			{
-				ft_putendl(line);
-				free(line);
-			}
-			i++;
+			ft_putendl(line);
+			free(line);
 		}
-	close(fg);
+		close(fg);
 	}
 	return (0);
 } 

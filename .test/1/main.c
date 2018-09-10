@@ -6,11 +6,11 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:44:09 by cmiran            #+#    #+#             */
-/*   Updated: 2018/09/05 16:36:52 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/09/06 15:21:32 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../get_next_line.h"
+#include "../../get_next_line.h"
 #include <fcntl.h>
 
 #define X	(argc - 1)

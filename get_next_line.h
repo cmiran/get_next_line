@@ -6,7 +6,7 @@
 /*   By: cmiran <cmiran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 17:37:08 by cmiran            #+#    #+#             */
-/*   Updated: 2018/01/30 10:57:27 by cmiran           ###   ########.fr       */
+/*   Updated: 2018/09/10 15:53:02 by cmiran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <limits.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "../libft/libft.h"
+# include "./libft/includes/libft.h"
 
 # define BUFF_SIZE 42
 
